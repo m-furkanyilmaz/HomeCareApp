@@ -1,0 +1,16 @@
+.enterButton:hover {
+  background-color: gainsboro;
+  color: black;
+  border: 1px solid black;
+}
+.loginForm {
+  margin-top: 300px;
+}
+
+@media screen and (max-width: 768px) {
+  .loginForm > label,
+  input,
+  .buttonDiv {
+    width: 150px !important;
+  }
+}
