@@ -1,8 +1,54 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import axios from "axios";
 
-function AddMember() {
+const AddMember = () => {
+  const [patientInfo, setPatientInfo] = useState({
+    Name: "",
+    Surname: "",
+    FatherName: "",
+    MotherName: "",
+    Address: "",
+    Phone: "1111111111",
+    Gender: "",
+    BirthDate: "1980-01-01",
+    CountryIdentity: "11111111111",
+    Blood: "",
+    RegistrationDate: new Date(),
+  });
+
+  useEffect(() => {
+    const setPatientData = async () => {
+      const data = await axios
+        .post("localhost:5000/", { patientInfo })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      console.log(data);
+    };
+    setPatientData();
+  }, [patientInfo.RegistrationDate]);
+
+  const setInput = (e) => {
+    const { name, value } = e.target;
+    // if (name === "TCNO" || name === "Telefon") {
+    //   setPatientInfo((preValues) => ({
+    //     ...preValues,
+    //     [name]: parseInt(value),
+    //   }));
+    //   return;
+    // }} else {
+    setPatientInfo((preValues) => ({
+      ...preValues,
+      [name]: value,
+    }));
+    return;
+  };
+
   return (
     <div className="container">
       <Navbar />
@@ -15,7 +61,9 @@ function AddMember() {
             type="text"
             className="form-control"
             id="validationCustom01"
+            name="Ad"
             required
+            onChange={setInput}
           />
         </div>
         <div className="col-md-4">
@@ -24,9 +72,11 @@ function AddMember() {
           </label>
           <input
             type="text"
+            name="Soyad"
             className="form-control"
             id="validationCustom02"
             required
+            onChange={setInput}
           />
         </div>
         <div className="col-md-4">
@@ -37,11 +87,13 @@ function AddMember() {
             <input
               type="text"
               placeholder=""
+              name="TCNO"
               className="form-control"
               id="validationCustomUsername"
               aria-describedby="inputGroupPrepend"
               maxLength="11"
               required
+              onChange={setInput}
             />
           </div>
         </div>
@@ -51,9 +103,11 @@ function AddMember() {
           </label>
           <input
             type="text"
+            name="BabaAdi"
             className="form-control"
             id="validationCustom01"
             required
+            onChange={setInput}
           />
         </div>
         <div className="col-md-4">
@@ -62,9 +116,11 @@ function AddMember() {
           </label>
           <input
             type="text"
+            name="AnneAdi"
             className="form-control"
             id="validationCustom02"
             required
+            onChange={setInput}
           />
         </div>
         <div className="col-md-4">
@@ -75,11 +131,13 @@ function AddMember() {
             <input
               type="text"
               placeholder="555 555 55 55"
+              name="Telefon"
               className="form-control"
               id="validationCustomUsername"
               aria-describedby="inputGroupPrepend"
               maxLength="10"
               required
+              onChange={setInput}
             />
           </div>
         </div>
@@ -92,6 +150,7 @@ function AddMember() {
             className="form-select"
             id="validationCustom04"
             required
+            onSelect={setInput}
           >
             <option disabled value="">
               Seçim Yapınız:
@@ -108,6 +167,7 @@ function AddMember() {
             className="form-select"
             id="validationCustom04"
             required
+            onSelect={setInput}
           >
             <option disabled value="">
               Seçim Yapınız:
@@ -127,6 +187,7 @@ function AddMember() {
             className="form-control"
             id="validationCustom05"
             required
+            onChange={setInput}
           />
         </div>
         <div className="col-md-6">
@@ -139,6 +200,7 @@ function AddMember() {
             className="form-control"
             id="validationCustom03"
             required
+            onChange={setInput}
           />
         </div>
 
@@ -151,6 +213,6 @@ function AddMember() {
       <Footer />
     </div>
   );
-}
+};
 
 export default AddMember;

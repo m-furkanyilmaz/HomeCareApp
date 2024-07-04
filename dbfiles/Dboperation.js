@@ -1,4 +1,4 @@
-const config = require("./Dbconfig"),
+/* const config = require("./Dbconfig"),
   sqlConnectionToserver = require("mssql");
 
 const createVisit = async (visitInput) => {
@@ -29,3 +29,4 @@ module.exports = {
   createVisit,
   getEmployees,
 };
+*/

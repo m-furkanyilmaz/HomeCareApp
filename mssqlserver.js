@@ -1,4 +1,4 @@
-const { Sequelize, where } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize("HomeCareDB", "HomeCareLogin", "homeCare123", {
   port: 1337,
@@ -12,8 +12,6 @@ const sequelize = new Sequelize("HomeCareDB", "HomeCareLogin", "homeCare123", {
 });
 
 const Database = require("./models/mssql/database");
-const { AutoIncrement } = require("@sequelize/core/decorators-legacy");
-
 //? Bağlantı
 
 const onConnect = async () => {
@@ -21,7 +19,10 @@ const onConnect = async () => {
     await sequelize.authenticate();
     console.log("Bağlandı!");
     await Database.Users.sync({ force: false });
+    await Database.Visits.sync({ force: false });
     await Database.States.sync({ force: false });
+    await Database.Patients.sync({ force: false });
+    await Database.Processes.sync({ force: false });
   } catch (error) {
     console.log("hata", error);
   }
@@ -43,26 +44,28 @@ getUsers();
 
 //? Bir Kullanıcıya Eriş
 
-const findOneUser = async () => {
-  const result = await Database.Users.findOne({ where: { UserID: 10001 } });
+const findOneUser = async (denemeName) => {
+  const result = await Database.Users.findOne({
+    where: { Username: denemeName },
+  });
   console.log("result", result.dataValues);
 };
 
 // findOneUser();
 
 //? Bir Kuruma Eriş
-
+/*
 const findOneState = async () => {
   const result = await Database.States.findOne({ where: { StateID: 1 } });
   console.log("result", result.dataValues);
 };
 
 findOneState();
+*/
+//? Kullanıcı Ekle
 
-//? User Ekle
-
-const createUsers = async (user) => {
-  const result = await Database.Users.create({
+const createUser = async (user, res) => {
+  const request = await Database.Users.create({
     StateID: user.StateID,
     Name: user.Name,
     Surname: user.Surname,
@@ -76,7 +79,57 @@ const createUsers = async (user) => {
     Address: user.Address,
     Phone: user.Phone,
   });
-  console.log("result", result.dataValues);
+  res.status(200).send(request);
+  console.log("request", request.dataValues);
 };
 
-// createUsers();
+// createUser();
+
+//? Hasta Ekle
+
+const createPatient = async (patient) => {
+  const request = await Database.Patients.create({
+    Name: patient.Name,
+    Surname: patient.Surname,
+    FatherName: patient.FatherName,
+    MotherName: patient.MotherName,
+    Address: patient.Address,
+    Phone: patient.Phone,
+    Gender: patient.Gender,
+    BirthDate: patient.BirthDate,
+    CountryIdentity: patient.CountryIdentity,
+    Blood: patient.Blood,
+    RegistrationDate: patient.RegistrationDate,
+  });
+  console.log("request", request.dataValues);
+};
+
+//? İşlem Oluştur
+
+const createProcess = async (patient, user, process) => {
+  const request = await Database.Processes.create({
+    VisiterID: user.UserID,
+    PatientID: patient.PatientID,
+    ProcessName: process.Name,
+    ProcessComment: process.ProcessComment,
+    ProcessBegin: process.ProcessBegin,
+    ProcessFinish: process.ProcessFinish,
+  });
+  console.log("request", request.dataValues);
+};
+
+//? Hasta Bilgilerini Getir, İşlem Yapılacak mı? Kontrol Et!
+
+const getPatientInfo = async (patientInfo) => {
+  const result = await Database.Patients.findOne({
+    where: { CountryIdentity: `${patientInfo}` },
+  });
+};
+
+module.exports = {
+  getPatientInfo,
+  createPatient,
+  createUser,
+  findOneUser,
+  createProcess,
+};

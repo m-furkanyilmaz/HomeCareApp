@@ -7,7 +7,7 @@ function Footer() {
         style={{
           textAlign: "center",
           position: "fixed",
-          bottom: "0px",
+          bottom: "13px",
           width: "-webkit-fill-available",
         }}
         className="container"

@@ -131,6 +131,7 @@ const Patients = sequelize.define(
   {
     freezeTableName: true,
     tableName: "Patients",
+    modelName: "Patients",
   }
 );
 
