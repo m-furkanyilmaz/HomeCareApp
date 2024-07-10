@@ -18,30 +18,28 @@ const AddMember = () => {
     RegistrationDate: new Date(),
   });
 
-  useEffect(() => {
-    const setPatientData = async () => {
-      const data = await axios
-        .post("localhost:5000/", { patientInfo })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      console.log(data);
-    };
-    setPatientData();
-  }, [patientInfo.RegistrationDate]);
+  const setPatientData = async (info) => {
+    const data = await axios
+      .post("//localhost:5000/", info)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    console.log(data);
+  };
 
   const setInput = (e) => {
     const { name, value } = e.target;
-    // if (name === "TCNO" || name === "Telefon") {
-    //   setPatientInfo((preValues) => ({
-    //     ...preValues,
-    //     [name]: parseInt(value),
-    //   }));
-    //   return;
-    // }} else {
+    //* Veritabanına gönderilecek verinin tipini değiştirmek için kullanılır
+    /* if (name === "TCNO" || name === "Telefon") {
+      setPatientInfo((preValues) => ({
+        ...preValues,
+        [name]: parseInt(value),
+      }));
+      return;
+    }} else {*/
     setPatientInfo((preValues) => ({
       ...preValues,
       [name]: value,
@@ -52,7 +50,11 @@ const AddMember = () => {
   return (
     <div className="container">
       <Navbar />
-      <form className="row g-3 needs-validation mt-3" noValidate>
+      <form
+        className="row g-3 needs-validation mt-3"
+        noValidate
+        onSubmit={setPatientData(patientInfo)}
+      >
         <div className="col-md-4">
           <label htmlFor="validationCustom01" className="form-label">
             Ad:

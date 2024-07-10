@@ -32,26 +32,32 @@ onConnect();
 
 //? Tüm Kullanıcılar
 
-const getUsers = async () => {
-  const result = await Database.Users.findAll();
-  console.log("result", result.length);
-  result.forEach((item) => {
-    console.log("item", item.dataValues);
-  });
-};
+// const getUsers = async () => {
+//   const result = await Database.Users.findAll();
+//   console.log("result", result.length);
+//   result.forEach((item) => {
+//     console.log("item", item.dataValues);
+//   });
+// };
 
-getUsers();
+// getUsers();
 
-//? Bir Kullanıcıya Eriş
+//? Bir Hasta Bilgisi Getir
 
-const findOneUser = async (denemeName) => {
-  const result = await Database.Users.findOne({
-    where: { Username: denemeName },
+const findOnePatient = async (req, res) => {
+  let countryId = req.params.CountryIdentity;
+  const result = await Database.Patients.findOne({
+    where: { CountryIdentity: "66666666666" },
   });
   console.log("result", result.dataValues);
+  res.status(200).send(result);
 };
 
-// findOneUser();
+const findLastPatients = async (req, res) => {
+  const results = await Database.Users.findAll({});
+  console.log("result", results.dataValues);
+  res.status(200).send(results);
+};
 
 //? Bir Kuruma Eriş
 /*
@@ -79,8 +85,8 @@ const createUser = async (user, res) => {
     Address: user.Address,
     Phone: user.Phone,
   });
-  res.status(200).send(request);
   console.log("request", request.dataValues);
+  res.status(200).send(request);
 };
 
 // createUser();
@@ -120,16 +126,22 @@ const createProcess = async (patient, user, process) => {
 
 //? Hasta Bilgilerini Getir, İşlem Yapılacak mı? Kontrol Et!
 
-const getPatientInfo = async (patientInfo) => {
-  const result = await Database.Patients.findOne({
-    where: { CountryIdentity: `${patientInfo}` },
+const findOneUser = async (req, res) => {
+  let userInfo = {
+    Username: req.body.Username,
+    Password: req.body.Password,
+  };
+  const result = await Database.Users.findOne({
+    where: { Username: userInfo.Username, Password: userInfo.Password },
   });
+  res.status(200).send(result);
 };
 
 module.exports = {
-  getPatientInfo,
+  findOneUser,
   createPatient,
   createUser,
-  findOneUser,
+  findOnePatient,
   createProcess,
+  findLastPatients,
 };
