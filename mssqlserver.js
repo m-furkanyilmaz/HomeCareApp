@@ -45,16 +45,29 @@ onConnect();
 //? Bir Hasta Bilgisi Getir
 
 const findOnePatient = async (req, res) => {
-  let countryId = req.params.CountryIdentity;
-  const result = await Database.Patients.findOne({
-    where: { CountryIdentity: "66666666666" },
+  let ID = req.params.CountryIdentity;
+  const result = await Database.Patients.findAll({
+    where: {
+      CountryIdentity: ID,
+    },
   });
+  if (result === null) {
+    console.log("Not found!", req.params.CountryIdentity);
+  } else {
+    console.log("result", result.dataValues);
+    res.status(200).send(result);
+  }
+};
+
+const findAllPatient = async (req, res) => {
+  let ID = req.params.CountryIdentity;
+  const result = await Database.Patients.findAll();
   console.log("result", result.dataValues);
   res.status(200).send(result);
 };
 
-const findLastPatients = async (req, res) => {
-  const results = await Database.Users.findAll({});
+const findAllUsers = async (req, res) => {
+  const results = await Database.Users.findAll();
   console.log("result", results.dataValues);
   res.status(200).send(results);
 };
@@ -93,26 +106,41 @@ const createUser = async (user, res) => {
 
 //? Hasta Ekle
 
-const createPatient = async (patient) => {
+const createPatient = async (req, res) => {
+  let newPatient = {
+    Name: req.params.Name,
+    Surname: req.params.Surname,
+    FatherName: req.params.FatherName,
+    MotherName: req.params.MotherName,
+    Address: req.params.Address,
+    Phone: req.params.Phone,
+    Gender: req.params.Gender,
+    BirthDate: req.params.BirthDate,
+    CountryIdentity: req.params.CountryIdentity,
+    Blood: req.params.Blood,
+    RegistrationDate: req.params.RegistrationDate,
+  };
   const request = await Database.Patients.create({
-    Name: patient.Name,
-    Surname: patient.Surname,
-    FatherName: patient.FatherName,
-    MotherName: patient.MotherName,
-    Address: patient.Address,
-    Phone: patient.Phone,
-    Gender: patient.Gender,
-    BirthDate: patient.BirthDate,
-    CountryIdentity: patient.CountryIdentity,
-    Blood: patient.Blood,
-    RegistrationDate: patient.RegistrationDate,
+    Name: newPatient.Name,
+    Surname: newPatient.Surname,
+    FatherName: newPatient.FatherName,
+    MotherName: newPatient.MotherName,
+    Address: newPatient.Address,
+    Phone: newPatient.Phone,
+    Gender: newPatient.Gender,
+    BirthDate: newPatient.BirthDate,
+    CountryIdentity: newPatient.CountryIdentity,
+    Blood: newPatient.Blood,
+    RegistrationDate: newPatient.RegistrationDate,
   });
   console.log("request", request.dataValues);
+  console.log("Yeni Hasta Bilgileri:", newPatient);
+  res.status(200).send(request);
 };
 
 //? İşlem Oluştur
 
-const createProcess = async (patient, user, process) => {
+const createProcess = async (req, res) => {
   const request = await Database.Processes.create({
     VisiterID: user.UserID,
     PatientID: patient.PatientID,
@@ -127,21 +155,23 @@ const createProcess = async (patient, user, process) => {
 //? Hasta Bilgilerini Getir, İşlem Yapılacak mı? Kontrol Et!
 
 const findOneUser = async (req, res) => {
-  let userInfo = {
-    Username: req.body.Username,
-    Password: req.body.Password,
-  };
+  let userInfo = req.params.Username;
   const result = await Database.Users.findOne({
-    where: { Username: userInfo.Username, Password: userInfo.Password },
+    where: { Username: userInfo },
   });
-  res.status(200).send(result);
+  if (result === null) {
+    console.log("User Not Found!");
+  } else {
+    res.status(200).send(result);
+  }
 };
 
 module.exports = {
   findOneUser,
+  findAllPatient,
   createPatient,
   createUser,
   findOnePatient,
   createProcess,
-  findLastPatients,
+  findAllUsers,
 };

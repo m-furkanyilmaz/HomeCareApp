@@ -8,16 +8,17 @@ function PatientView() {
   const [identityValue, setIdentityValue] = useState("");
   const [isThere, setIsThere] = useState(false);
   const [patientInfo, setPatientInfo] = useState({
-    Name: "",
-    Surname: "",
-    FatherName: "",
-    MotherName: "",
-    Address: "",
+    PatientID: 1,
+    Name: " ",
+    Surname: " ",
+    FatherName: " ",
+    MotherName: " ",
+    Address: " ",
     Phone: "1111111111",
-    Gender: "",
+    Gender: " ",
     BirthDate: "1980-01-01",
     CountryIdentity: "11111111111",
-    Blood: "",
+    Blood: " ",
     RegistrationDate: new Date(),
   });
 
@@ -25,19 +26,26 @@ function PatientView() {
     const getPatientData = async () => {
       console.log(identityValue, identityValue.length);
       const resp = await axios
-        .get("//localhost:5000/api/homecare/patientInfo", identityValue)
+        .get(`/api/homecare/patientInfo/${identityValue}`)
         .then(function (response) {
-          console.log(response.data);
-          setIsThere(true);
-          setPatientInfo(resp);
+          if (response.data[0] === undefined) {
+            setIsThere(false);
+            console.log(response);
+          } else {
+            setPatientInfo(response.data[0]);
+            console.log(response.data[0]);
+            setIsThere(true);
+          }
         })
         .catch(function (error) {
           console.log(error);
           setIsThere(false);
         });
-      console.log(resp);
+      // setPatientInfo(resp);
+      // console.log(resp);
+      // console.log(patientInfo);
     };
-    getPatientData(identityValue);
+    if (identityValue.length === 11) getPatientData();
   }, [identityValue.length === 11]);
   return (
     <div className="container">
@@ -53,14 +61,19 @@ function PatientView() {
             setShowInfo("none");
           }
         }}
-        type="search"
+        type="number"
         value={identityValue}
         id="searchPatient"
         name="search"
         maxLength="11"
         onChange={(event) => {
+          if (event.target.value.length >= 12) {
+            event.target.value.slice(0, 11);
+          } else {
+            setIdentityValue(event.target.value);
+            setIsThere(false);
+          }
           console.log(identityValue);
-          setIdentityValue(event.target.value);
         }}
       />
       <div

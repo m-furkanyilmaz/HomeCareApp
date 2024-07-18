@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import axios from "axios";
@@ -18,9 +18,9 @@ const AddMember = () => {
     RegistrationDate: new Date(),
   });
 
-  const setPatientData = async (info) => {
+  const setPatientData = async () => {
     const data = await axios
-      .post("//localhost:5000/", info)
+      .post(`/api/homecare/addMember/`, patientInfo)
       .then(function (response) {
         console.log(response);
       })

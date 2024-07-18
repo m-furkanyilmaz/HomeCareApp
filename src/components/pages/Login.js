@@ -4,55 +4,88 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
-  const navigate = useNavigate("/home");
-  const [userInfo, setUserName] = useState({
+  const navigate = useNavigate();
+  const [userDetail, setUserDetail] = useState({
+    UserID: 1,
+    StateID: 1,
+    Name: " ",
+    Surname: " ",
+    Username: " ",
+    Password: " ",
+    Title: " ",
+    CountryIdentity: "11111111111",
+    Gender: " ",
+    BirthPlace: " ",
+    BirthDate: "1980-01-01",
+    Address: " ",
+    Phone: "1111111111",
+  });
+  const [userInfo, setUserInfo] = useState({
     Username: "",
     Password: "",
   });
 
-  const handleSubmit = () => {
-    // if (findOneUser(userInfo)) {
-    //   navigate("/home");
-    // } else {
-    // }
+  const setInput = (e) => {
+    const { name, value } = e.target;
+    console.log(userInfo.Username, userInfo.Password);
+    setUserInfo((preValues) => ({
+      ...preValues,
+      [name]: value,
+    }));
+    return;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      userInfo.Username === userDetail.Username &&
+      userInfo.Password === userDetail.Password.trim()
+    ) {
+      console.log("Eşleşme Sağlandı!");
+      try {
+        setTimeout(navigate, 0, "/home");
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      console.log("Uyuşmazlık!");
+      alert("Lütfen Bilgilerinizi Kontrol Ediniz");
+      return navigate("/");
+    }
   };
 
   useEffect(() => {
-    const getUserInfo = async (userAccount) => {
+    const getUserInfo = async () => {
       const data = await axios
-        .get("localhost:5000", userAccount)
+        .get(`/api/homecare/users/${userInfo.Username}`)
         .then(function (response) {
-          console.log(response);
+          console.log(response.data);
+          setUserDetail(response.data);
+          console.log(userInfo);
         })
         .catch(function (error) {
           console.log(error);
         });
       console.log(data);
     };
-    getUserInfo(userInfo);
-  }, [handleSubmit]);
+    if (userInfo.Password.length >= 5) getUserInfo();
+  }, [userInfo.Password.length >= 5]);
 
-  const setInput = (e) => {
-    const { name, value } = e.target;
-    setUserName((preValues) => ({
-      ...preValues,
-      [name]: value,
-    }));
-    return;
-  };
   return (
     <form className="container d-flex flex-column align-items-center loginForm">
       <label style={{ width: "25%" }}>Kullanıcı Adı:</label>
       <input
-        onChange={(event) => setInput}
+        onChange={setInput}
         id="userId"
+        name="Username"
         style={{ width: "25%" }}
         type="text"
       />
       <label style={{ width: "25%", marginTop: "5px" }}>Şifre:</label>
       <input
-        onChange={(event) => setInput}
+        onChange={setInput}
         id="userPassword"
+        name="Password"
         style={{ width: "25%" }}
         type="password"
       />
@@ -79,9 +112,8 @@ function Login() {
         </NavLink>
         <NavLink
           style={{ width: "80px" }}
-          to={navigate("/home")}
+          onClick={(event) => handleSubmit(event)}
           className="enterButton btn btn-dark"
-          onClick={() => handleSubmit}
         >
           Giriş
         </NavLink>
