@@ -1,7 +1,7 @@
 const dbController = require("../mssqlserver.js");
 const router = require("express").Router();
 
-router.post("/addMember/:patientInfo", dbController.createPatient);
+router.post("/addmember", dbController.createPatient);
 
 router.post("/processes", dbController.createProcess);
 

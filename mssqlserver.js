@@ -107,19 +107,22 @@ const createUser = async (user, res) => {
 //? Hasta Ekle
 
 const createPatient = async (req, res) => {
+  console.log(req);
   let newPatient = {
-    Name: req.params.Name,
-    Surname: req.params.Surname,
-    FatherName: req.params.FatherName,
-    MotherName: req.params.MotherName,
-    Address: req.params.Address,
-    Phone: req.params.Phone,
-    Gender: req.params.Gender,
-    BirthDate: req.params.BirthDate,
-    CountryIdentity: req.params.CountryIdentity,
-    Blood: req.params.Blood,
-    RegistrationDate: req.params.RegistrationDate,
+    Name: req.body.Name,
+    Surname: req.body.Surname,
+    FatherName: req.body.FatherName,
+    MotherName: req.body.MotherName,
+    Address: req.body.Address,
+    Phone: req.body.Phone,
+    Gender: req.body.Gender,
+    BirthDate: req.body.BirthDate,
+    CountryIdentity: req.body.CountryIdentity,
+    Blood: req.body.Blood,
+    RegistrationDate: req.body.RegistrationDate,
   };
+  console.log(newPatient);
+
   const request = await Database.Patients.create({
     Name: newPatient.Name,
     Surname: newPatient.Surname,
@@ -133,8 +136,10 @@ const createPatient = async (req, res) => {
     Blood: newPatient.Blood,
     RegistrationDate: newPatient.RegistrationDate,
   });
+
   console.log("request", request.dataValues);
   console.log("Yeni Hasta Bilgileri:", newPatient);
+  await request.save();
   res.status(200).send(request);
 };
 

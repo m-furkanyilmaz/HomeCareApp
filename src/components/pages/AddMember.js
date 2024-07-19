@@ -18,11 +18,14 @@ const AddMember = () => {
     RegistrationDate: new Date(),
   });
 
-  const setPatientData = async () => {
+  const setPatientData = async (e) => {
+    e.preventDefault();
+    console.log(patientInfo);
     const data = await axios
-      .post(`/api/homecare/addMember/`, patientInfo)
+      .post(`/api/homecare/addmember`, patientInfo)
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
+        alert("Hasta Bilgileri Kaydedildi.");
       })
       .catch(function (error) {
         console.log(error);
@@ -53,7 +56,7 @@ const AddMember = () => {
       <form
         className="row g-3 needs-validation mt-3"
         noValidate
-        onSubmit={setPatientData(patientInfo)}
+        onSubmit={(event) => setPatientData(event)}
       >
         <div className="col-md-4">
           <label htmlFor="validationCustom01" className="form-label">
@@ -63,7 +66,7 @@ const AddMember = () => {
             type="text"
             className="form-control"
             id="validationCustom01"
-            name="Ad"
+            name="Name"
             required
             onChange={setInput}
           />
@@ -74,7 +77,7 @@ const AddMember = () => {
           </label>
           <input
             type="text"
-            name="Soyad"
+            name="Surname"
             className="form-control"
             id="validationCustom02"
             required
@@ -89,7 +92,7 @@ const AddMember = () => {
             <input
               type="text"
               placeholder=""
-              name="TCNO"
+              name="CountryIdentity"
               className="form-control"
               id="validationCustomUsername"
               aria-describedby="inputGroupPrepend"
@@ -105,7 +108,7 @@ const AddMember = () => {
           </label>
           <input
             type="text"
-            name="BabaAdi"
+            name="FatherName"
             className="form-control"
             id="validationCustom01"
             required
@@ -118,7 +121,7 @@ const AddMember = () => {
           </label>
           <input
             type="text"
-            name="AnneAdi"
+            name="MotherName"
             className="form-control"
             id="validationCustom02"
             required
@@ -133,7 +136,7 @@ const AddMember = () => {
             <input
               type="text"
               placeholder="555 555 55 55"
-              name="Telefon"
+              name="Phone"
               className="form-control"
               id="validationCustomUsername"
               aria-describedby="inputGroupPrepend"
@@ -151,10 +154,11 @@ const AddMember = () => {
             defaultValue=""
             className="form-select"
             id="validationCustom04"
+            name="Gender"
             required
-            onSelect={setInput}
+            onChange={setInput}
           >
-            <option disabled value="">
+            <option disabled value={""}>
               Seçim Yapınız:
             </option>
             <option>Erkek</option> <option>Kadın</option>
@@ -168,8 +172,9 @@ const AddMember = () => {
             defaultValue=""
             className="form-select"
             id="validationCustom04"
+            name="Blood"
             required
-            onSelect={setInput}
+            onChange={setInput}
           >
             <option disabled value="">
               Seçim Yapınız:
@@ -188,6 +193,7 @@ const AddMember = () => {
             type="date"
             className="form-control"
             id="validationCustom05"
+            name="BirthDate"
             required
             onChange={setInput}
           />
@@ -201,6 +207,7 @@ const AddMember = () => {
             style={{ height: "170px" }}
             className="form-control"
             id="validationCustom03"
+            name="Address"
             required
             onChange={setInput}
           />

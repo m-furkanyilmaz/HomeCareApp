@@ -27,6 +27,6 @@ app.get("/users/:Username", router);
 
 // app.get("/users", router);
 
-app.post("/addMember/:patientInfo", router);
+app.post("/addmember", router);
 
 app.post("/processes", router);
