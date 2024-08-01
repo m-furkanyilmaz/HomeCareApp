@@ -11,21 +11,23 @@ function PatientView() {
     PatientID: 1,
     Name: " ",
     Surname: " ",
-    FatherName: " ",
-    MotherName: " ",
-    Address: " ",
-    Phone: "1111111111",
-    Gender: " ",
-    BirthDate: "1980-01-01",
     CountryIdentity: "11111111111",
+    Gender: " ",
     Blood: " ",
-    RegistrationDate: new Date(),
+    BirthDate: "1980-01-01",
+    Device: " ",
+    Disability: " ",
+    Bedridden: " ",
+    FatherName: " ",
+    Phone: "1111111111",
+    Address: " ",
+    Diagnosis: " ",
   });
 
   useEffect(() => {
     const getPatientData = async () => {
       console.log(identityValue, identityValue.length);
-      const resp = await axios
+      await axios
         .get(`/api/homecare/patientInfo/${identityValue}`)
         .then(function (response) {
           if (response.data[0] === undefined) {
@@ -65,6 +67,7 @@ function PatientView() {
         value={identityValue}
         id="searchPatient"
         name="search"
+        className="form-control w-25 border-success"
         maxLength="11"
         onChange={(event) => {
           if (event.target.value.length >= 12) {
@@ -136,18 +139,7 @@ function PatientView() {
             value={patientInfo.FatherName}
           />
         </div>
-        <div className="col-md-4">
-          <label htmlFor="validationCustom02" className="form-label">
-            Anne Adı:
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationCustom02"
-            disabled
-            value={patientInfo.MotherName}
-          />
-        </div>
+
         <div className="col-md-4">
           <label htmlFor="validationCustomUsername" className="form-label">
             Telefon:
@@ -201,6 +193,42 @@ function PatientView() {
             value={patientInfo.BirthDate}
           />
         </div>
+        <div className="col-md-4">
+          <label htmlFor="validationCustom01" className="form-label">
+            Cihaz:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="validationCustom01"
+            disabled
+            value={patientInfo.Device}
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="validationCustom01" className="form-label">
+            Engelli:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="validationCustom01"
+            disabled
+            value={patientInfo.Disability}
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="validationCustom01" className="form-label">
+            Yatalak:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="validationCustom01"
+            disabled
+            value={patientInfo.Bedridden}
+          />
+        </div>
         <div className="col-md-6">
           <label htmlFor="validationCustom03" className="form-label">
             Adres:
@@ -212,6 +240,19 @@ function PatientView() {
             id="validationCustom03"
             disabled
             value={patientInfo.Address}
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="validationCustom02" className="form-label">
+            Tanı:
+          </label>
+          <textarea
+            type="text"
+            className="form-control"
+            style={{ height: "170px" }}
+            id="validationCustom02"
+            disabled
+            value={patientInfo.Diagnosis}
           />
         </div>
       </div>

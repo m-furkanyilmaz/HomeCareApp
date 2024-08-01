@@ -91,19 +91,7 @@ const Patients = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    FatherName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    MotherName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    Address: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    Phone: {
+    CountryIdentity: {
       type: DataTypes.CHAR,
       allowNull: false,
     },
@@ -111,20 +99,40 @@ const Patients = sequelize.define(
       type: DataTypes.CHAR,
       allowNull: false,
     },
-    BirthDate: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
-    CountryIdentity: {
-      type: DataTypes.CHAR,
-      allowNull: false,
-    },
     Blood: {
       type: DataTypes.CHAR,
       allowNull: false,
     },
-    RegistrationDate: {
+    BirthDate: {
       type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    Device: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    Disability: {
+      type: DataTypes.CHAR,
+      allowNull: false,
+    },
+    Bedridden: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    FatherName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    Phone: {
+      type: DataTypes.CHAR,
+      allowNull: false,
+    },
+    Address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    Diagnosis: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
@@ -148,24 +156,84 @@ const Processes = sequelize.define(
       type: DataTypes.SMALLINT,
       allowNull: false,
     },
+    Visiter: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
     PatientID: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    ProcessName: {
-      type: DataTypes.STRING,
+    PatientName: {
+      type: DataTypes.STRING(50),
       allowNull: false,
     },
-    ProcessComment: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    ProcessBegin: {
+    ProcessDate: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    ProcessFinish: {
-      type: DataTypes.DATE,
+    DoctorInfo: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+    },
+    Consultation: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+    },
+    Intravenous: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+    },
+    Subcutaneous: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+    },
+    Dressing: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+    },
+    Catheter: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+    },
+    Examination: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+    },
+    BurnDressing: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+    },
+    Nasogastric: {
+      type: DataTypes.CHAR(5),
+      allowNull: false,
+    },
+    Intramuscular: {
+      type: DataTypes.CHAR(2),
+      allowNull: false,
+    },
+    SentEmergency: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    Request: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    Hospitalize: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    ElderlyCare: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    Kilometer: {
+      type: DataTypes.CHAR(2),
+      allowNull: false,
+    },
+    TypeOfNutrition: {
+      type: DataTypes.CHAR(4),
       allowNull: false,
     },
   },
@@ -220,11 +288,11 @@ const Visits = sequelize.define(
       allowNull: false,
       autoIncrement: true,
     },
-    UserID: {
+    VisiterID: {
       type: DataTypes.SMALLINT,
       allowNull: false,
     },
-    PatientsID: {
+    PatientID: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -232,16 +300,12 @@ const Visits = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    VisitType: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     VisitDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    VisitComment: {
-      type: DataTypes.STRING,
+    VisitCount: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },

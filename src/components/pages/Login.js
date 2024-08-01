@@ -23,6 +23,7 @@ function Login() {
   const [userInfo, setUserInfo] = useState({
     Username: "",
     Password: "",
+    UserID: 1,
   });
 
   const setInput = (e) => {
@@ -31,6 +32,7 @@ function Login() {
     setUserInfo((preValues) => ({
       ...preValues,
       [name]: value,
+      UserID: userDetail.UserID,
     }));
     return;
   };
@@ -42,6 +44,7 @@ function Login() {
       userInfo.Password === userDetail.Password.trim()
     ) {
       console.log("Eşleşme Sağlandı!");
+      sessionStorage.setItem("user", JSON.stringify(userInfo));
       try {
         setTimeout(navigate, 0, "/home");
       } catch (err) {

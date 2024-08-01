@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../Navbar";
 import "../css/home.css";
 import { NavLink } from "react-router-dom";
@@ -7,6 +7,72 @@ import Footer from "../Footer";
 
 function Home() {
   const [style, setStyle] = useState("none");
+  const [patientInfo, setPatientInfo] = useState({
+    PatientID: 1,
+    Name: " ",
+    Surname: " ",
+    CountryIdentity: "11111111111",
+    Gender: " ",
+    Blood: " ",
+    BirthDate: "1980-01-01",
+    Device: " ",
+    Disability: " ",
+    Bedridden: " ",
+    FatherName: " ",
+    Phone: "1111111111",
+    Address: " ",
+    Diagnosis: " ",
+  });
+
+  const [processInfo, setProcessInfo] = useState({
+    VisiterID: 1,
+    Visiter: ``,
+    PatientID: 1,
+    PatientName: "",
+    ProcessDate: "",
+    DoctorInfo: "",
+    Consultation: "",
+    Intravenous: "",
+    Subcutaneous: "",
+    Dressing: "",
+    Catheter: "",
+    Examination: "",
+    BurnDressing: "",
+    Nasogastric: "",
+    Intramuscular: "",
+    SentEmergency: "",
+    Request: "",
+    Hospitalize: "",
+    ElderlyCare: "",
+    Kilometer: "",
+    TypeOfNutrition: "",
+  });
+
+  // useEffect(() => {
+  //   const getPatientData = async () => {
+  //     console.log(identityValue, identityValue.length);
+  //     await axios
+  //       .get(`/api/homecare/patientInfo/${identityValue}`)
+  //       .then(function (response) {
+  //         if (response.data[0] === undefined) {
+  //           setIsThere(false);
+  //           console.log(response);
+  //         } else {
+  //           setPatientInfo(response.data[0]);
+  //           console.log(response.data[0]);
+  //           setIsThere(true);
+  //         }
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //         setIsThere(false);
+  //       });
+  // setPatientInfo(resp);
+  // console.log(resp);
+  // console.log(patientInfo);
+  //   };
+  //   if (identityValue.length === 11) getPatientData();
+  // }, []);
 
   const handleClick = () => {
     if (style === "none") {
@@ -95,25 +161,30 @@ function Home() {
               <p>
                 <b>Hasta Adı:</b>
               </p>
-              <input type="text" disabled />
+              <input type="text" value={patientInfo.Name} disabled />
             </div>
             <div className="col-md-6">
               <p>
                 <b>TC Kimlik No:</b>
               </p>
-              <input type="text" disabled />
+              <input type="text" value={patientInfo.CountryIdentity} disabled />
             </div>
             <div className="col-md-6">
               <p>
                 <b>Baba Adı:</b>
               </p>
-              <input type="text" disabled />
+              <input type="text" value={patientInfo.FatherName} disabled />
             </div>
             <div className="col-md-6">
               <p>
                 <b>D.Tarihi:</b>
               </p>
-              <input style={{ width: "189px" }} type="date" disabled />
+              <input
+                style={{ width: "189px" }}
+                value={patientInfo.BirthDate}
+                type="date"
+                disabled
+              />
             </div>
           </div>
 
@@ -132,6 +203,7 @@ function Home() {
             }}
             name=""
             id=""
+            value={patientInfo.Address}
             disabled
           ></textarea>
           <p>
@@ -145,6 +217,7 @@ function Home() {
             }}
             name=""
             id=""
+            value={""}
             disabled
           ></textarea>
         </div>

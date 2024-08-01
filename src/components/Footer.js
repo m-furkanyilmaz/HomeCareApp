@@ -6,9 +6,10 @@ function Footer() {
       <div
         style={{
           textAlign: "center",
-          position: "fixed",
-          bottom: "13px",
+          flexShrink: 0,
+          bottom: "0px",
           width: "-webkit-fill-available",
+          marginBottom: "0px",
         }}
         className="container"
       >

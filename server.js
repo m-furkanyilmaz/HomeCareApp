@@ -25,6 +25,8 @@ app.get("/patientInfo/:CountryIdentity", router);
 
 app.get("/users/:Username", router);
 
+app.get("/patientInfo/oldPatients", router);
+
 // app.get("/users", router);
 
 app.post("/addmember", router);

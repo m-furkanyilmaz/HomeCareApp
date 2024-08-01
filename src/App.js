@@ -8,17 +8,36 @@ import Process from "./components/pages/Process";
 import PatientView from "./components/pages/PatientView";
 import Login from "./components/pages/Login";
 import Password from "./components/pages/Password";
+import { useEffect } from "react";
+// import LoginNavigater from "./components/LoginNavigater";
+
+const userControl = sessionStorage.getItem("user");
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/addmember" element={<AddMember />} />
-        <Route path="/process" element={<Process />} />
-        <Route path="/viewpatient" element={<PatientView />} />
-        <Route path="/rememberpw" element={<Password />} />
+        <Route
+          path={sessionStorage ? "/home" : "/"}
+          element={userControl ? <Home /> : <Login />}
+        />
+        <Route
+          path={sessionStorage ? "/addmember" : "/"}
+          element={userControl ? <AddMember /> : <Login />}
+        />
+        <Route
+          path={sessionStorage ? "/process" : "/"}
+          element={userControl ? <Process /> : <Login />}
+        />
+        <Route
+          path={sessionStorage ? "/viewpatient" : "/"}
+          element={userControl ? <PatientView /> : <Login />}
+        />
+        <Route
+          path={sessionStorage ? "/rememberpw" : "/"}
+          element={userControl ? <Password /> : <Login />}
+        />
       </Routes>
     </div>
   );
