@@ -42,7 +42,7 @@ onConnect();
 
 // getUsers();
 
-//? Bir Hasta Bilgisi Getir
+//? TC Kimlik Numarası Girilen Hasta Bilgisi Getir
 
 const findOnePatient = async (req, res) => {
   let ID = req.params.CountryIdentity;
@@ -59,36 +59,57 @@ const findOnePatient = async (req, res) => {
   }
 };
 
-const findOldPatients = async (req, res) => {
-  const result = await Database.Processes.findAll({
-    order: ["ProcessDate", "ASC"],
-    limit: 10,
+//? Eski tarihli işlemleri getir
+
+const findOldProcesses = async (req, res) => {
+  try {
+    const result = await Database.Processes.findAll({
+      order: [
+        ["ProcessDate", "ASC"], // 'ASC' küçükten büyüğe sıralar
+      ],
+      limit: 10, // İlk 10 veriyi çeker
+    });
+
+    if (result.length === 0) {
+      console.log("No records found!");
+      res.status(404).send("No records found!");
+    } else {
+      console.log("Result:", result);
+      res.status(200).send(result);
+    }
+  } catch (error) {
+    console.error("Error fetching records:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+// findOldProcesses();
+
+//? Tüm Hastaları Bul
+
+const findAllPatient = async (req, res) => {
+  let ID = req.params.PatientID;
+  const result = await Database.Patients.findOne({
+    where: {
+      PatientID: ID,
+    },
   });
   if (result === null) {
-    console.log("Not found!");
+    console.log("Not found!", req.params.CountryIdentity);
   } else {
     console.log("result", result.dataValues);
     res.status(200).send(result);
   }
 };
 
-// const findAllFarAway = async (req, res) => {
-//   let ID = req.params.CountryIdentity;
-//   const result = await Database.Patients.findAll({
-//     where: {
-//       CountryIdentity: ID,
-//     },
-//   });
-//   if (result === null) {
-//     console.log("Not found!", req.params.CountryIdentity);
-//   } else {
-//     console.log("result", result.dataValues);
-//     res.status(200).send(result);
-//   }
-// };
+//? Hastaya ait işlemleri bul
 
-const findAllPatient = async (req, res) => {
-  const result = await Database.Patients.findAll();
+const findPatientProcess = async (req, res) => {
+  console.log(req.body.PatientID, req.params.PatientID);
+  let PID = req.params.PatientID;
+  const result = await Database.Processes.findAll({
+    where: { PatientID: PID },
+  });
   console.log("result", result.dataValues);
   res.status(200).send(result);
 };
@@ -99,16 +120,7 @@ const findAllUsers = async (req, res) => {
   res.status(200).send(results);
 };
 
-//? Bir Kuruma Eriş
-/*
-const findOneState = async () => {
-  const result = await Database.States.findOne({ where: { StateID: 1 } });
-  console.log("result", result.dataValues);
-};
-
-findOneState();
-*/
-//? Kullanıcı Ekle
+//! Kullanıcı ekle ---Kullanılmıyor!---
 
 const createUser = async (user, res) => {
   const request = await Database.Users.create({
@@ -129,8 +141,6 @@ const createUser = async (user, res) => {
   res.status(200).send(request);
 };
 
-// createUser();
-
 //? Hasta Ekle
 
 const createPatient = async (req, res) => {
@@ -150,8 +160,6 @@ const createPatient = async (req, res) => {
     Address: req.body.Address,
     Diagnosis: req.body.Diagnosis,
   };
-  console.log(newPatient);
-
   const request = await Database.Patients.create({
     Name: newPatient.Name,
     Surname: newPatient.Surname,
@@ -174,7 +182,7 @@ const createPatient = async (req, res) => {
   res.status(200).send(request);
 };
 
-//? İşlem Oluştur
+//? Kullanıcının girdiği işlemi database e kaydet
 
 const createProcess = async (req, res) => {
   let newProcess = {
@@ -228,7 +236,7 @@ const createProcess = async (req, res) => {
   res.status(200).send(request);
 };
 
-//? Hasta Bilgilerini Getir, İşlem Yapılacak mı? Kontrol Et!
+//? Username girilen kullanıcı bilgisini getir
 
 const findOneUser = async (req, res) => {
   let userInfo = req.params.Username;
@@ -244,11 +252,12 @@ const findOneUser = async (req, res) => {
 
 module.exports = {
   findOneUser,
-  findOldPatients,
+  findOldProcesses,
   findAllPatient,
   createPatient,
   createUser,
   findOnePatient,
   createProcess,
   findAllUsers,
+  findPatientProcess,
 };

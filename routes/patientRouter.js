@@ -7,7 +7,11 @@ router.post("/processes", dbController.createProcess);
 
 router.get("/patientInfo/:CountryIdentity", dbController.findOnePatient);
 
-router.get("/patientInfo/oldPatients", dbController.findOldPatients);
+router.get("/oldProcessInfo", dbController.findOldProcesses);
+
+router.get("/patientData/:PatientID", dbController.findAllPatient);
+
+router.get("/viewpatient/process/:PatientID", dbController.findPatientProcess);
 
 // router.get("/patientInfo/", dbController.findAllPatient);
 

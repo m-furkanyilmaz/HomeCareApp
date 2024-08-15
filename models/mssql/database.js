@@ -169,7 +169,7 @@ const Processes = sequelize.define(
       allowNull: false,
     },
     ProcessDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     DoctorInfo: {

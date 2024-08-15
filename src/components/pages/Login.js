@@ -37,19 +37,14 @@ function Login() {
     return;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (
       userInfo.Username === userDetail.Username &&
       userInfo.Password === userDetail.Password.trim()
     ) {
       console.log("Eşleşme Sağlandı!");
-      sessionStorage.setItem("user", JSON.stringify(userInfo));
-      try {
-        setTimeout(navigate, 0, "/home");
-      } catch (err) {
-        console.log(err);
-      }
+      localStorage.setItem("user", JSON.stringify(userInfo));
+      setTimeout(navigate, 1, "/home");
     } else {
       console.log("Uyuşmazlık!");
       alert("Lütfen Bilgilerinizi Kontrol Ediniz");
@@ -59,7 +54,7 @@ function Login() {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const data = await axios
+      await axios
         .get(`/api/homecare/users/${userInfo.Username}`)
         .then(function (response) {
           console.log(response.data);
@@ -69,10 +64,9 @@ function Login() {
         .catch(function (error) {
           console.log(error);
         });
-      console.log(data);
     };
-    if (userInfo.Password.length >= 5) getUserInfo();
-  }, [userInfo.Password.length >= 5]);
+    if (userInfo.Password.length >= 2) getUserInfo();
+  }, [userInfo.Password.length >= 2]);
 
   return (
     <form className="container d-flex flex-column align-items-center loginForm">
@@ -115,7 +109,7 @@ function Login() {
         </NavLink>
         <NavLink
           style={{ width: "80px" }}
-          onClick={(event) => handleSubmit(event)}
+          onClick={() => handleSubmit()}
           className="enterButton btn btn-dark"
         >
           Giriş

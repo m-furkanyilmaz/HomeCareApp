@@ -25,7 +25,7 @@ function Process() {
     Diagnosis: " ",
   });
 
-  const storedUserData = sessionStorage.getItem("user");
+  const storedUserData = localStorage.getItem("user");
 
   const [userData, setUserData] = useState(JSON.parse(storedUserData));
 
@@ -53,6 +53,8 @@ function Process() {
     TypeOfNutrition: "",
   });
 
+  //? İşlemin girileceği alanın displayini flexe çeken metod
+
   const handleClick = (e) => {
     e.preventDefault();
     if (isThere) {
@@ -74,6 +76,8 @@ function Process() {
       setShowProcess("none");
     }
   };
+
+  //?Girilen TC No ile Hasta Bilgilerini Çeken ve PatientInfo Hook'una Atan metod
 
   useEffect(() => {
     const getPatientData = async () => {
@@ -101,6 +105,8 @@ function Process() {
     if (identityValue.length === 11) getPatientData();
   }, [identityValue.length === 11]);
 
+  //? Kaydet Butonu ile Çalışan ve Veriyi Api ye istek atan metod
+
   const setProcessData = async (e) => {
     e.preventDefault();
     console.log(isThere);
@@ -114,8 +120,9 @@ function Process() {
         alert("İşlemler Kaydedilirken Bir Sorun Oluştu!", error);
         console.log(error);
       });
-    console.log(isThere);
   };
+
+  //? Kullanıcının Girdiği işlemleri ProcessInfo'ya kaydeden metod
 
   const setInput = (e) => {
     const { name, value } = e.target;
@@ -131,9 +138,9 @@ function Process() {
     setProcessInfo((preValues) => ({
       ...preValues,
       [name]: value,
-      ProcessDate: new Date(),
       VisiterID: userData.UserID,
       Visiter: userData.Username,
+      ProcessDate: new Date(),
     }));
     console.log(name, value);
     console.log(
@@ -599,7 +606,7 @@ function Process() {
             </div>
             <div className="col-md-4">
               <label htmlFor="validationTON" className="form-label">
-                Yaşbak Yönlendirildi:
+                Beslenme Şekli:
               </label>
               <select
                 defaultValue={"default"}

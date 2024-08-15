@@ -1,17 +1,15 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/pages/Home";
 import AddMember from "./components/pages/AddMember";
 import Process from "./components/pages/Process";
 import PatientView from "./components/pages/PatientView";
 import Login from "./components/pages/Login";
 import Password from "./components/pages/Password";
-import { useEffect } from "react";
-// import LoginNavigater from "./components/LoginNavigater";
 
-const userControl = sessionStorage.getItem("user");
+const userControl = localStorage.getItem("user");
 
 function App() {
   return (
@@ -19,25 +17,22 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
-          path={sessionStorage ? "/home" : "/"}
-          element={userControl ? <Home /> : <Login />}
+          path="/home"
+          element={userControl ? <Home /> : <Navigate to="/" />}
         />
         <Route
-          path={sessionStorage ? "/addmember" : "/"}
-          element={userControl ? <AddMember /> : <Login />}
+          path="/addmember"
+          element={userControl ? <AddMember /> : <Navigate to="/" />}
         />
         <Route
-          path={sessionStorage ? "/process" : "/"}
-          element={userControl ? <Process /> : <Login />}
+          path="/process"
+          element={userControl ? <Process /> : <Navigate to="/" />}
         />
         <Route
-          path={sessionStorage ? "/viewpatient" : "/"}
-          element={userControl ? <PatientView /> : <Login />}
+          path="/viewpatient"
+          element={userControl ? <PatientView /> : <Navigate to="/" />}
         />
-        <Route
-          path={sessionStorage ? "/rememberpw" : "/"}
-          element={userControl ? <Password /> : <Login />}
-        />
+        <Route path="/rememberpw" element={<Password />} />
       </Routes>
     </div>
   );

@@ -4,14 +4,17 @@ import Footer from "../Footer";
 import axios from "axios";
 
 function PatientView() {
-  const [showInfo, setShowInfo] = useState("none");
+  const [showPatientInfo, setShowPatientInfo] = useState("none");
   const [identityValue, setIdentityValue] = useState("");
   const [isThere, setIsThere] = useState(false);
+  const [isThereProcess, setIsThereProcess] = useState(false);
+  const [showProcessInfo, setShowProcessInfo] = useState("none");
+
   const [patientInfo, setPatientInfo] = useState({
     PatientID: 1,
     Name: " ",
     Surname: " ",
-    CountryIdentity: "11111111111",
+    CountryIdentity: "",
     Gender: " ",
     Blood: " ",
     BirthDate: "1980-01-01",
@@ -23,6 +26,92 @@ function PatientView() {
     Address: " ",
     Diagnosis: " ",
   });
+
+  const [processDetail, setProcessDetail] = useState([
+    {
+      ProcessID: 1,
+      VisiterID: 1,
+      PatientID: 1,
+      Visiter: "",
+      PatientName: "",
+      DoctorInfo: "",
+      Consultation: "",
+      Intravenous: "",
+      Subcutaneous: "",
+      Dressing: "",
+      Catheter: "",
+      Examination: "",
+      BurnDressing: "",
+      Nasogastric: "",
+      Intramuscular: "",
+      SentEmergency: "",
+      Request: "",
+      Hospitalize: "",
+      ElderlyCare: "",
+      Kilometer: "",
+      TypeOfNutrition: "",
+      ProcessDate: "",
+    },
+  ]);
+
+  const headers = [
+    // "id",
+    // "ProcessID",
+    // "VisiterID",
+    { label: "Dosya No", value: "PatientID" },
+    { label: "Ziyaret Eden", value: "Visiter" },
+    { label: "Hasta Adı", value: "PatientName" },
+    { label: "DR", value: "DoctorInfo" },
+    { label: "Kons", value: "Consultation" },
+    { label: "IV", value: "Intravenous" },
+    { label: "Subkutan", value: "Subcutaneous" },
+    { label: "Pansuman", value: "Dressing" },
+    { label: "Sonda", value: "Catheter" },
+    { label: "Tetkik", value: "Examination" },
+    { label: "Yanık Pansuman", value: "BurnDressing" },
+    { label: "NG", value: "Nasogastric" },
+    { label: "IM", value: "Intramuscular" },
+    { label: "Acile Yönlendirildi", value: "SentEmergency" },
+    { label: "Talep", value: "Request" },
+    { label: "Hastaneye Kaldırıldı", value: "Hospitalize" },
+    { label: "Yaşbak Yönlendirildi", value: "ElderlyCare" },
+    { label: "KM", value: "Kilometer" },
+    { label: "Beslenme Şekli", value: "TypeOfNutrition" },
+    { label: "İşlem Tarihi", value: "ProcessDate" },
+  ];
+
+  const processDetailWithId = processDetail.map((item, index) => ({
+    id: index + 1,
+    ...item,
+  }));
+
+  const ProcessInfoClick = () => {
+    const getPatientProcessInfo = async () => {
+      await axios
+        .get(`/api/homecare/viewpatient/process/${patientInfo.PatientID}`)
+        .then(function (response) {
+          if (response.data.length === 0) {
+            setIsThereProcess(false);
+            console.log(response.data[0]);
+          } else {
+            setProcessDetail(response.data);
+            console.log(
+              processDetail.length,
+              response.data.length,
+              processDetail,
+              response.data
+            );
+            setIsThereProcess(true);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+    getPatientProcessInfo();
+    setTimeout(setShowProcessInfo("block"), 3000);
+    console.log(processDetailWithId);
+  };
 
   useEffect(() => {
     const getPatientData = async () => {
@@ -43,12 +132,10 @@ function PatientView() {
           console.log(error);
           setIsThere(false);
         });
-      // setPatientInfo(resp);
-      // console.log(resp);
-      // console.log(patientInfo);
     };
     if (identityValue.length === 11) getPatientData();
   }, [identityValue.length === 11]);
+
   return (
     <div className="container">
       <Navbar />
@@ -58,16 +145,16 @@ function PatientView() {
       <input
         onKeyDown={(event) => {
           if (event.key === "Enter" && identityValue.length === 11 && isThere) {
-            setShowInfo("flex");
+            setShowPatientInfo("flex");
           } else {
-            setShowInfo("none");
+            setShowPatientInfo("none");
           }
         }}
         type="number"
         value={identityValue}
         id="searchPatient"
         name="search"
-        className="form-control w-25 border-success"
+        className="form-control w-25 border-info"
         maxLength="11"
         onChange={(event) => {
           if (event.target.value.length >= 12) {
@@ -75,13 +162,15 @@ function PatientView() {
           } else {
             setIdentityValue(event.target.value);
             setIsThere(false);
+            setIsThereProcess(false);
+            setShowProcessInfo("none");
           }
           console.log(identityValue);
         }}
       />
       <div
         style={{
-          display: `${showInfo}`,
+          display: `${showPatientInfo}`,
           marginTop: "30px",
         }}
         className="row container g-3 needs-validation mt-3"
@@ -254,6 +343,79 @@ function PatientView() {
             disabled
             value={patientInfo.Diagnosis}
           />
+        </div>
+        <div className="col-12 d-flex justify-content-between">
+          <button
+            className="btn btn-info h-auto"
+            type="submit"
+            onClick={ProcessInfoClick}
+          >
+            İşlem Görüntüle
+          </button>
+        </div>
+        {/* //!-------------------------------------------------------------------SecondForm---------------------------------------------------------------------------- */}
+        <div
+          className="col-md-12 processViewScreen"
+          style={{
+            display: `${showProcessInfo}`,
+            overflowX: "auto",
+            maxWidth: "100%",
+          }}
+        >
+          {isThereProcess ? (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th style={{ backgroundColor: "#f2f2f2", color: "#333" }}>
+                    #
+                  </th>
+                  {headers.map((header, index) => (
+                    <th
+                      style={{
+                        backgroundColor: "#f2f2f2",
+                        color: "#333",
+                      }}
+                      key={header.value}
+                    >
+                      {header.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="table-group-divider">
+                {processDetailWithId.map((item, index) => {
+                  // console.log("Item:", item);
+                  return (
+                    <tr key={item.id}>
+                      <th scope="row">{index + 1}</th>
+                      {headers.map((header, idx) => (
+                        <td key={idx}>
+                          {/* {console.log(
+                            "Header:",
+                            header,
+                            "Value:",
+                            item[header]
+                          )} */}
+                          {typeof item[header.value] === "boolean"
+                            ? item[header.value]
+                              ? "Evet"
+                              : "Hayır"
+                            : item[header.value] !== undefined
+                            ? item[header.value]
+                            : "N/A"}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <div>
+              {" "}
+              <h1>GÖRÜNTÜLEDİĞİNİZ HASTAYA AİT İŞLEM BULUNAMADI!</h1>
+            </div>
+          )}
         </div>
       </div>
       <Footer />

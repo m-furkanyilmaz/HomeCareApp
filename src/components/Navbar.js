@@ -4,7 +4,7 @@ import "../components/css/navbar.css";
 
 function Navbar() {
   const handleQuit = () => {
-    sessionStorage.clear();
+    localStorage.clear();
   };
 
   return (
